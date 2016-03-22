@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/benhartley/mutant/issues"
   },
-  "homepage": "https://github.com/benhartley/mutant#readme"
+  "homepage": "https://github.com/benhartley/mutant#readme",
+  "dependencies": {
+    "babylon": "^6.7.0"
+  }
 }
