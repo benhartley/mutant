@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/benhartley/mutant#readme",
   "dependencies": {
+    "babylon": "^6.7.0",
+    "chalk": "^1.1.1"
   },
   "devDependencies": {
     "ava": "^0.13.0"
