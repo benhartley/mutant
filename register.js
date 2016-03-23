@@ -1,0 +1,1 @@
+lib/register.js
