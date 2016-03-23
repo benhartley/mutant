@@ -4,7 +4,7 @@
   "description": "A mutation testing framework for JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "ava"
+    "test": "mocha --recursive"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,9 @@
     "tap-parser": "^1.2.2"
   },
   "devDependencies": {
-    "ava": "^0.13.0"
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.3"
   }
 }
