@@ -24,7 +24,11 @@
   "homepage": "https://github.com/benhartley/mutant#readme",
   "dependencies": {
     "babylon": "^6.7.0",
-    "chalk": "^1.1.1"
+    "bluebird": "^3.3.4",
+    "chalk": "^1.1.1",
+    "figures": "^1.5.0",
+    "lodash": "^4.6.1",
+    "tap-parser": "^1.2.2"
   },
   "devDependencies": {
     "ava": "^0.13.0"
