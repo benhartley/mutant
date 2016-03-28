@@ -1,8 +1,8 @@
-var path = require('path');
-var get = require('lodash/get');
-var fail = require('./fail');
+const path = require('path');
+const get = require('lodash/get');
+const fail = require('./fail');
 
-var config;
+let config;
 
 function init() {
     try {
@@ -16,7 +16,7 @@ function init() {
 init();
 
 module.exports = {
-    get: function(path, defaultValue) {
+    get(path, defaultValue) {
         return get(config, path, defaultValue);
     }
 };
