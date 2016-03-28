@@ -1,5 +1,5 @@
-const get = require('lodash/get');
-const mutator = require('./mutator');
+import {get} from 'lodash';
+import * as mutator from 'mutator';
 
 function shouldRegister(filename) {
     if (!get(process, 'env.MUTANT') || /node_modules/.test(filename)) {return false;}
