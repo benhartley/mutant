@@ -1,15 +1,15 @@
-var chalk = require('chalk');
-var has = require('lodash/has');
-var testRunner = require('./test-runner');
-var fail = require('./fail');
+const chalk = require('chalk');
+const has = require('lodash/has');
+const testRunner = require('./test-runner');
+const fail = require('./fail');
 
 function welcome() {
-    return console.log(chalk.green('\n\
-  /\\/\\  \n\
- /    \\    Mutant\n\
-/ /\\/\\ \\   Mutation Testing Framework\n\
-\\/    \\/\n\
-'));
+    return console.log(chalk.green(`
+  /\\/\\
+ /    \\    Mutant
+/ /\\/\\ \\   Mutation Testing Framework
+\\/    \\/
+`));
 }
 
 function handleInitialTestRun(result) {
