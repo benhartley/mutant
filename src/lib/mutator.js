@@ -13,7 +13,7 @@ const mutations = config.get('mutations', [])
 module.exports = filename => {
     const code = fs.readFileSync(filename, 'utf8');
     const ast = babylon.parse(code);
-    babelTraverse(ast, mutations['boolean-literal-flip']);
+    babelTraverse(ast, mutations['boolean-literal-flip']('01'));
     return babelGenerator(ast, null, code).code;
 };
 
