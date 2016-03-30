@@ -5,10 +5,10 @@ const fail = require('./fail');
 
 function welcome() {
     return console.log(chalk.green(`
-  /\\/\\
- /    \\    Mutant
-/ /\\/\\ \\   Mutation Testing Framework
-\\/    \\/
+   /\\/\\
+  /    \\    Mutant
+ / /\\/\\ \\   Mutation Testing Framework
+ \\/    \\/
 `));
 }
 
