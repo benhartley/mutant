@@ -16,8 +16,6 @@ function init() {
 init();
 
 module.exports = {
-    get(path, defaultValue) {
-        return get(config, path, defaultValue);
-    }
+    get: get.bind(null, config)
 };
 
