@@ -1,9 +1,8 @@
-const get = require('lodash/get');
+const has = require('lodash/get');
 const mutator = require('./mutator');
 
 function shouldRegister(filename) {
-    if (!get(process, 'env.MUTANT') || /node_modules/.test(filename)) {return false;}
-    return true;
+    return (has(process, 'env.MUTATION') && has(process, 'env.STATEMASK') && !/node_modules/.test(filename));
 }
 
 function main() {
