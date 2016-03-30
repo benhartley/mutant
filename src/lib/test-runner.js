@@ -12,9 +12,11 @@ function processTestCommand() {
 module.exports = env => {
     return new bluebird((resolve, reject) => {
         const testProcess = spawn.apply(null, processTestCommand(), assign(process.env, env));
-        testProcess.stdout.pipe(tapParser(resolve));
+        testProcess.stdout.pipe(tapParser(result => {
+            return resolve(assign({tap: result}, env));
+        }));
         testProcess.on('exit', code => {
-            if (code !== 0) {return reject();}
+            if (code !== 0) {return reject(`Test runner exited with: ${code}`);}
         });
     });
 };
