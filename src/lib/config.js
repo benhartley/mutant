@@ -13,9 +13,17 @@ function init() {
     return config;
 }
 
+function validate() {
+    const testCommand = get(config, 'tests.run');
+    if (!testCommand) {return fail('Config missing tests.run command');}
+    if (!/\$FILE/.test(testCommand)) {return fail('Config tests.run command missing $FILE placeholder');}
+    return;
+}
+
 init();
 
 module.exports = {
-    get: get.bind(null, config)
+    get: get.bind(null, config),
+    validate
 };
 

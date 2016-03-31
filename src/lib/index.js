@@ -5,6 +5,7 @@ const get = require('lodash/get');
 const has = require('lodash/has');
 const testRunner = require('./test-runner');
 const fail = require('./fail');
+const config = require('./config');
 const packageJson = require('../package');
 
 function welcome() {
@@ -25,6 +26,7 @@ function handleInitialTestRun(response) {
 
 function main(testPath) {
     welcome();
+    config.validate();
     return testRunner(testPath)
         .then(handleInitialTestRun)
         .then(() => {
