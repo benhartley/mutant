@@ -1,9 +1,11 @@
+const commander = require('commander');
 const chalk = require('chalk');
 const figures = require('figures');
 const get = require('lodash/get');
 const has = require('lodash/has');
 const testRunner = require('./test-runner');
 const fail = require('./fail');
+const packageJson = require('../package');
 
 function welcome() {
     return console.log(chalk.green(`
@@ -21,13 +23,13 @@ function handleInitialTestRun(response) {
     return fail('Initial test run failed - please check your tests are passing to begin.');
 }
 
-function main() {
+function main(testPath) {
     welcome();
-    return testRunner()
+    return testRunner(testPath)
         .then(handleInitialTestRun)
         .then(() => {
             // get num cpus here and do map.concurrency
-            return testRunner({
+            return testRunner(testPath, {
                 MUTATION: 'boolean-literal-flip',
                 STATEMASK: '01'
             });
@@ -38,5 +40,9 @@ function main() {
         .catch(fail);
 }
 
-main();
+commander
+    .version(get(packageJson, 'version'))
+    .command('<testPath>', 'run Mutant against a single test file')
+    .action(main)
+    .parse(process.argv);
 

@@ -32,6 +32,7 @@
     "babylon": "^6.7.0",
     "bluebird": "^3.3.4",
     "chalk": "^1.1.1",
+    "commander": "^2.9.0",
     "figures": "^1.5.0",
     "lodash": "^4.6.1",
     "tap-parser": "^1.2.2"
