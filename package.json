@@ -9,6 +9,9 @@
     "test": "mocha --recursive",
     "watch": "babel src --out-dir . --watch"
   },
+  "bin": {
+    "mutant": "./bin/mutant.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benhartley/mutant.git"
