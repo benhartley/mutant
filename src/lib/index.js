@@ -1,3 +1,4 @@
+require('source-map-support').install();
 const commander = require('commander');
 const chalk = require('chalk');
 const figures = require('figures');
