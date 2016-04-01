@@ -1,12 +1,11 @@
+const replace = require('../../lib/binary-expression-operator-replace');
+
 let n = 0;
 
 module.exports = stateMask => {
     return {
         BinaryExpression(path) {
-            if (stateMask.substr(n, 1) === '1' && path.node.operator === '>=') {
-                path.node.operator = '>';
-            }
-            n++;
+            n = replace('>=', '>', stateMask, n, path);
         }
     };
 };
