@@ -42,15 +42,15 @@ function initialTestRun(queue, testPath) {
 
 function mutationTestRun(queue, testPath) {
     return (mutation, mapCallback) => {
-        let run = 0;
+        let nodeCount = 1;
         let stateMask = '1';
         return async.whilst(
-            () => run < 3,
+            () => stateMask.length <= nodeCount,
             whilstCallback => {
-                run += 1;
                 return queue.push(
                     getMutationParams(testPath, mutation, stateMask),
                     (error, result) => {
+                        nodeCount = get(result, 'nodeCount');
                         stateMask = `${get(result, 'stateMaskWithResult')}1`;
                         return whilstCallback(error, result);
                     }
@@ -61,17 +61,10 @@ function mutationTestRun(queue, testPath) {
     };
 }
 
-function getQueue() {
-    const queue = async.queue(testRunner, 1);
-    queue.empty = () => console.log('queue empty');
-    queue.drain = () => console.log('queue drained');
-    return queue;
-}
-
 function main(testPath) {
     welcome();
     config.validate();
-    const queue = getQueue();
+    const queue = async.queue(testRunner, 1);
     initialTestRun(queue, testPath);
     return async
         .map(
