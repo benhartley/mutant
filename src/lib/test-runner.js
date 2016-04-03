@@ -1,9 +1,7 @@
 const assign = require('lodash/assign');
-const get = require('lodash/get');
 const spawn = require('child_process').spawn;
-const tapParser = require('tap-parser');
-const didPass = require('./did-pass');
 const config = require('./config');
+const Parser = require('./test-process-output-parser');
 
 function getTestCommand(testPath) {
     return config
@@ -11,37 +9,6 @@ function getTestCommand(testPath) {
         .replace('$FILE', testPath)
         .split(' ');
 }
-
-function updateStateMask(params, result) {
-    const stateMask = get(params, 'env.STATEMASK');
-    if (!stateMask) {return;}
-    return {
-        stateMaskWithResult: didPass(result) ? stateMask : stateMask.replace(/1$/, '0')
-    };
-}
-
-function Parser() {
-    return assign(this, {nodeCount: 0});
-}
-
-Parser.prototype.getTestParser = function(params, callback) {
-    const testParser = tapParser(result => {
-        return callback(null, assign(
-            {mutation: get(params, 'env.MUTATION')},
-            {tap: result},
-            updateStateMask(params, result),
-            {nodeCount: this.nodeCount}
-        ));
-    });
-    testParser.on('extra', this.parseNodeCount.bind(this));
-    return testParser;
-};
-
-Parser.prototype.parseNodeCount = function(extra) {
-    const matchedNodeCount = extra.match(/Node count: (\d+)/);
-    if (matchedNodeCount === null) {return;}
-    this.nodeCount = +matchedNodeCount[1];
-};
 
 module.exports = (params, callback) => {
     const [command, ...args] = getTestCommand(params.testPath);
