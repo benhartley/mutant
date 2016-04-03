@@ -1,6 +1,8 @@
 const assign = require('lodash/assign');
+const get = require('lodash/get');
 const spawn = require('child_process').spawn;
 const tapParser = require('tap-parser');
+const didPass = require('./did-pass');
 const config = require('./config');
 
 function getTestCommand(testPath) {
@@ -8,6 +10,14 @@ function getTestCommand(testPath) {
         .get('tests.run')
         .replace('$FILE', testPath)
         .split(' ');
+}
+
+function updateStateMask(params, result) {
+    const stateMask = get(params, 'env.STATEMASK');
+    if (!stateMask) {return;}
+    return {
+        stateMaskWithResult: didPass(result) ? stateMask.replace(/1$/, '0') : stateMask
+    };
 }
 
 module.exports = (params, callback) => {
