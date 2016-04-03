@@ -85,7 +85,7 @@ function main(testPath) {
     initialTestRun(queue, testPath);
     return async
         .map(
-            config.get('mutations', []),
+            config.get('mutations'),
             mutationTestRun(queue, testPath),
             (err, results) => {
                 console.log('all done', results);
