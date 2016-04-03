@@ -61,19 +61,16 @@ function mutationTestRun(queue, testPath) {
     };
 }
 
+function reportResults(error, results) {
+    console.log('all done', results);
+}
+
 function main(testPath) {
     welcome();
     config.validate();
     const queue = async.queue(testRunner, 1);
     initialTestRun(queue, testPath);
-    return async
-        .map(
-            config.get('mutations'),
-            mutationTestRun(queue, testPath),
-            (err, results) => {
-                console.log('all done', results);
-            }
-        );
+    return async.map(config.get('mutations'), mutationTestRun(queue, testPath), reportResults);
 }
 
 commander
