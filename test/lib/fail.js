@@ -14,7 +14,8 @@ describe('fail lib', function() {
                 red: sinon.spy()
             },
             console: {
-                error: sinon.spy()
+                error: sinon.spy(),
+                log: sinon.stub()
             },
             figures: {
                 cross: sinon.stub().returns('cross')
