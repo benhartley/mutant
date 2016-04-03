@@ -5,8 +5,6 @@ const tapParser = require('tap-parser');
 const didPass = require('./did-pass');
 const config = require('./config');
 
-let nodeCount;
-
 function getTestCommand(testPath) {
     return config
         .get('tests.run')
@@ -22,30 +20,39 @@ function updateStateMask(params, result) {
     };
 }
 
-function getParser(params, callback) {
-    return tapParser(result => {
+function Parser() {
+    return assign(this, {nodeCount: 0});
+}
+
+Parser.prototype.getTestParser = function(params, callback) {
+    const testParser = tapParser(result => {
         return callback(null, assign(
             params,
             {tap: result},
             updateStateMask(params, result),
-            {nodeCount: nodeCount}
+            {nodeCount: this.getNodeCount()}
         ));
     });
-}
+    testParser.on('extra', this.parseNodeCount.bind(this));
+    return testParser;
+};
 
-function parseNodeCount(extra) {
+Parser.prototype.parseNodeCount = function(extra) {
     const matchedNodeCount = extra.match(/Node count: (\d+)/);
     if (matchedNodeCount === null) {return;}
-    nodeCount = +matchedNodeCount[1];
-}
+    this.nodeCount = +matchedNodeCount[1];
+};
 
-// feels like this should export a constructor so can be sure internal state not affected by others
+Parser.prototype.getNodeCount = function() {
+    return this.nodeCount;
+};
+
 module.exports = (params, callback) => {
     const [command, ...args] = getTestCommand(params.testPath);
     const testProcess = spawn(command, args, assign(process.env, params.env));
-    const parser = getParser(params, callback);
-    parser.on('extra', parseNodeCount);
-    testProcess.stdout.pipe(parser);
+    const parser = new Parser();
+    const testParser = parser.getTestParser(params, callback);
+    testProcess.stdout.pipe(testParser);
     testProcess.on('exit', code => {
         if (code !== 0) {return callback(`Test runner exited with: ${code}`);}
     });
