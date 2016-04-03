@@ -7,7 +7,7 @@ const isFunction = require('lodash/isFunction');
 const config = require('./config');
 const fail = require('./fail');
 
-const mutations = config.get('mutations', [])
+const plugins = config.get('mutations', [])
     .reduce((acc, mutation) => {
         try {
             acc[mutation] = require(`../plugins/mutations/${mutation}`);
@@ -17,18 +17,24 @@ const mutations = config.get('mutations', [])
         return acc;
     }, {});
 
-function getMutation() {
-    const mutation = get(mutations, process.env.MUTATION);
-    if (!isFunction(mutation)) {
-        return fail(`Plugin "${process.env.MUTATION}" does not return a function`);
-    }
-    return mutation(process.env.STATEMASK);
+function getMutation(mutation, stateMask) {
+    const plugin = get(plugins, mutation);
+    if (isFunction(plugin)) {return plugin(stateMask);}
+    return fail(`Plugin "${mutation}" does not return a function`);
+}
+
+function runMutations(ast) {
+    const mutations = process.env.MUTATION.split(',');
+    const stateMasks = process.env.STATEMASK.split(',');
+    if (mutations.length !== stateMasks.length) {return fail('Mutation / State Mask mismatch');}
+    return mutations
+        .map((mutation, i) => babelTraverse(ast, getMutation(mutation, stateMasks[i])));
 }
 
 module.exports = filename => {
     const code = fs.readFileSync(filename, 'utf8');
     const ast = babylon.parse(code);
-    babelTraverse(ast, getMutation());
+    runMutations(ast);
     return babelGenerator(ast, null, code).code;
 };
 
