@@ -8,6 +8,10 @@ const didPass = require('./did-pass');
 const fail = require('./fail');
 const testProcessCreator = require('./test-process-creator');
 
+function didMutate(result) {
+    return result.nodeCount > 0 && /1/.test(result.stateMaskWithResult);
+}
+
 function getMutationParams(testPath, mutation, stateMask) {
     return {
         testPath,
@@ -52,7 +56,7 @@ function mergeMutations(error, results) {
     if (error) {return fail(error);}
     console.log('all done', results);
     const positives = results
-        .filter(result => result.nodeCount > 0 && /1/.test(result.stateMaskWithResult));
+        .filter(didMutate);
     console.log('positives', positives);
 }
 
