@@ -31,10 +31,9 @@ function initialTestRun(queue, testPath) {
     });
 }
 
-function mutationTestRun(queue, testPath) {
+function mutationTestRun(queue, testPath, stateMask) {
     return (mutation, mapCallback) => {
         let nodeCount = 1;
-        let stateMask = '1';
         return async.whilst(
             () => stateMask.length <= nodeCount,
             whilstCallback => {
@@ -63,5 +62,5 @@ function mergeMutations(error, results) {
 module.exports = (testPath) => {
     const queue = async.queue(testProcessCreator, 1);
     initialTestRun(queue, testPath);
-    return async.map(config.get('mutations'), mutationTestRun(queue, testPath), mergeMutations);
+    return async.map(config.get('mutations'), mutationTestRun(queue, testPath, '1'), mergeMutations);
 };
