@@ -47,16 +47,13 @@ function mutationTestRun(queue, testPath, stateMask) {
     };
 }
 
-function mergeMutations(error, results) {
+function reportResult(error, results) {
     if (error) {return fail(error);}
     console.log('all done', results);
-    const positives = results
-        .filter(didMutate);
-    console.log('positives', positives);
 }
 
 module.exports = (testPath) => {
     const queue = async.queue(testProcessCreator, 1);
     initialTestRun(queue, testPath);
-    return async.map(config.get('mutations'), mutationTestRun(queue, testPath, '1'), mergeMutations);
+    return async.map(config.get('mutations'), mutationTestRun(queue, testPath, '1'), reportResult);
 };
