@@ -1,4 +1,6 @@
 const async = require('async');
+const chalk = require('chalk');
+const figures = require('figures');
 const os = require('os');
 const get = require('lodash/get');
 const config = require('./config');
@@ -33,6 +35,13 @@ function mutationTestRun(queue, testPath, stateMask) {
             mapCallback
         );
     };
+}
+
+function intro(testPath, mutations) {
+    console.log(chalk.blue(` Test suite: ${testPath}\n`));
+    console.log(chalk.grey(' Attempting to run the following mutations:'));
+    mutations.map(mutation => console.log(chalk.grey(`   ${figures.play} ${mutation}`)));
+    console.log();
 }
 
 module.exports = (testPath) => {
