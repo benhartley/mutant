@@ -1,5 +1,6 @@
 const commander = require('commander');
 const chalk = require('chalk');
+const figures = require('figures');
 const get = require('lodash/get');
 const testRunner = require('./test-runner');
 const config = require('./config');
@@ -19,7 +20,12 @@ function welcome() {
 function main(testPath) {
     welcome();
     config.validate();
-    return testRunner(testPath);
+    const mutations = config.get('mutations');
+    testRunner(testPath, mutations);
+    console.log(chalk.blue(` Test suite: ${testPath}\n`));
+    console.log(chalk.grey(' Attempting to run the following mutations:'));
+    mutations.map(mutation => console.log(chalk.grey(`   ${figures.play} ${mutation}`)));
+    return console.log();
 }
 
 commander

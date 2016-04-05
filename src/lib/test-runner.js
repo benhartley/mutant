@@ -47,17 +47,9 @@ function mutationTestRun(queue, testPath, stateMask) {
     };
 }
 
-function intro(testPath, mutations) {
-    console.log(chalk.blue(` Test suite: ${testPath}\n`));
-    console.log(chalk.grey(' Attempting to run the following mutations:'));
-    mutations.map(mutation => console.log(chalk.grey(`   ${figures.play} ${mutation}`)));
-    console.log();
-}
-
 module.exports = (testPath) => {
     const queue = async.queue(testProcessCreator, 1);
     const mutations = config.get('mutations');
     queue.push({testPath}, reportInitialRun(queue));
-    intro(testPath, mutations);
     return async.map(mutations, mutationTestRun(queue, testPath, '1'), reporter('default'));
 };
