@@ -8,10 +8,6 @@ const didPass = require('./did-pass');
 const fail = require('./fail');
 const testProcessCreator = require('./test-process-creator');
 
-function didMutate(result) {
-    return result.nodeCount > 0 && /1/.test(result.stateMaskWithResult);
-}
-
 function getMutationParams(testPath, mutation, stateMask) {
     return {
         testPath,
