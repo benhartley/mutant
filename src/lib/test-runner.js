@@ -1,12 +1,9 @@
 const async = require('async');
-const chalk = require('chalk');
-const figures = require('figures');
 const os = require('os');
 const get = require('lodash/get');
 const config = require('./config');
-const didPass = require('./did-pass');
-const fail = require('./fail');
 const testProcessCreator = require('./test-process-creator');
+const reporter = require('./reporter');
 
 function getMutationParams(testPath, mutation, stateMask) {
     return {
@@ -16,15 +13,6 @@ function getMutationParams(testPath, mutation, stateMask) {
             STATEMASK: stateMask
         }
     };
-}
-
-function initialTestRun(queue, testPath) {
-    return queue.push({testPath}, (error, result) => {
-        if (error) {return fail(error);}
-        if (!didPass(result.tap)) {return fail('Initial test run failed - please check your tests are passing to begin.');}
-        queue.concurrency = os.cpus().length;
-        console.log(` ${chalk.green(figures.tick)} Initial test run OK!`);
-    });
 }
 
 function mutationTestRun(queue, testPath, stateMask) {
@@ -47,13 +35,13 @@ function mutationTestRun(queue, testPath, stateMask) {
     };
 }
 
-function reportResult(error, results) {
-    if (error) {return fail(error);}
-    console.log('all done', results);
-}
-
 module.exports = (testPath) => {
     const queue = async.queue(testProcessCreator, 1);
-    initialTestRun(queue, testPath);
-    return async.map(config.get('mutations'), mutationTestRun(queue, testPath, '1'), reportResult);
+    queue.push({testPath}, reporter('initial'));
+    queue.concurrency = os.cpus().length;
+    return async.map(
+        config.get('mutations'),
+        mutationTestRun(queue, testPath, '1'),
+        reporter('default')
+    );
 };
