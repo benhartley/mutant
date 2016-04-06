@@ -22,7 +22,7 @@ function getMutationParams(testPath, mutation, stateMask) {
 function reportInitialRun(queue) {
     return (error, result) => {
         if (!didPass(result.tap)) {return fail('Initial test run failed - please check your tests are passing to begin.');}
-        console.log(` ${chalk.green(figures.tick)} Initial test run OK!\n`);
+        console.log(chalk.green(` ${figures.tick} Initial test run OK!\n`));
         queue.concurrency = os.cpus().length;
     };
 }
