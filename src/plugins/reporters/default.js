@@ -27,7 +27,7 @@ function mutationResult(result) {
 }
 
 module.exports = results => {
-    console.log(chalk.blue(' Results:'));
+    console.log(chalk.blue(' Mutation test run results:'));
     results
         .map(result => {
             mutationIntro(result);
