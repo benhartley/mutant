@@ -2,22 +2,12 @@ const async = require('async');
 const chalk = require('chalk');
 const figures = require('figures');
 const os = require('os');
-const get = require('lodash/get');
 const config = require('./config');
 const didPass = require('./did-pass');
 const fail = require('./fail');
 const testProcessCreator = require('./test-process-creator');
 const reporter = require('./reporter');
-
-function getMutationParams(testPath, mutation, stateMask) {
-    return {
-        testPath,
-        env: {
-            MUTATION: mutation,
-            STATEMASK: stateMask
-        }
-    };
-}
+const MutationTestRun = require('./mutation-test-run');
 
 function reportInitialRun(queue) {
     return (error, result) => {
@@ -27,29 +17,10 @@ function reportInitialRun(queue) {
     };
 }
 
-function mutationTestRun(queue, testPath, stateMask) {
-    return (mutation, mapCallback) => {
-        let nodeCount = 1;
-        return async.whilst(
-            () => stateMask.length <= nodeCount,
-            whilstCallback => {
-                return queue.push(
-                    getMutationParams(testPath, mutation, stateMask),
-                    (error, result) => {
-                        nodeCount = get(result, 'nodeCount');
-                        stateMask = `${get(result, 'stateMaskWithResult')}1`;
-                        return whilstCallback(error, result);
-                    }
-                );
-            },
-            mapCallback
-        );
-    };
-}
-
 module.exports = (testPath) => {
     const queue = async.queue(testProcessCreator, 1);
     const mutations = config.get('mutations');
+    const mutationTestRun = new MutationTestRun(queue, testPath, '1');
     queue.push({testPath}, reportInitialRun(queue));
-    return async.map(mutations, mutationTestRun(queue, testPath, '1'), reporter('default'));
+    return async.map(mutations, mutationTestRun.iteration.bind(mutationTestRun), reporter('default'));
 };
