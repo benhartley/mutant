@@ -1,5 +1,7 @@
 # Mutant
 
+![CI status](https://travis-ci.org/benhartley/mutant.svg?branch=master)
+
 **Note: this is very much at the proof-of-concept stage**
 
 ### What is it?
