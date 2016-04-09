@@ -1,4 +1,4 @@
-const has = require('lodash/get');
+const has = require('lodash/has');
 const mutator = require('./mutator');
 
 function shouldRegister(filename) {
