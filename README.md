@@ -21,7 +21,7 @@ Mutation testing, on the other hand, is designed to test how far the code can st
 You can install `mutant` globally, but the preferred way is to install it as a local dev-dependency:
 
 ``` sh
-npm i -D mutant
+npm i -D mutant-test
 ```
 
 You can then use it via a script in `package.json`:

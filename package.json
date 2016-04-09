@@ -1,5 +1,5 @@
 {
-  "name": "mutant",
+  "name": "mutant-test",
   "version": "0.0.1",
   "description": "A mutation testing framework for JavaScript",
   "main": "index.js",
