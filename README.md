@@ -1,5 +1,7 @@
 # Mutant
 
+**Note: this is very much at the proof-of-concept stage**
+
 ### What is it?
 
 `mutant` is a [mutation testing framework](https://en.wikipedia.org/wiki/Mutation_testing) designed to help evaluate the quality of test suites for JavaScript applications.
@@ -8,7 +10,7 @@
 
 Code coverage tools are useful to give an idea of how much of your code runs when your tests run, giving an overview of areas that may have been overlooked.
 
-However, they do not provide a great deal of insight into how closely the code behaviour _matches_ that delineated in the tests. A test simply triggering a code path is not enough to be confident the test adequately defines the required behaviour to an acceptable level of detail.
+However, they do not provide a great deal of insight into how closely the code behaviour _matches_ that which is delineated in the tests. A test simply triggering a code path is not enough to be confident the test adequately defines the required behaviour to an acceptable level of detail.
 
 Mutation testing, on the other hand, is designed to test how far the code can stray from the original while the tests still pass. It does this by making incremental modifications to the code under test, and then repeatedly running the test suite against the new versions produced. If the tests pass for a mutated version, we may gain some insight into where there might be gaps in how the tests are designed.
 
@@ -36,5 +38,16 @@ Or access the local binary directly using
 ./node_modules/.bin/mutant /path/to/test/file.js
 ```
 
-
 # Usage
+
+You can use `mutant` alongside any test framework that can output results in [TAP](link to tap here) format.
+
+Some examples for popular frameworks:
+
+``` sh
+mocha --reporter tap
+ava --tap
+```
+
+Currently `mutant` only supports running against a single test file at a time, so your test framework will also need to support passing the path to run a subset of tests. Watch this space for the ability to run full test suites.
+
