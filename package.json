@@ -6,7 +6,6 @@
   "scripts": {
     "build": "babel src --out-dir .",
     "coverage": "istanbul cover _mocha -- --recursive",
-    "postinstall": "babel src --out-dir .",
     "start": "node lib/index.js",
     "test": "mocha --recursive",
     "watch": "babel src --out-dir . --watch"
