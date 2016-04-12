@@ -6,7 +6,7 @@ var underTest = rewire('../../lib/binary-expression-operator-replace');
 
 describe('binaryExpressionOperatorReplace lib', function() {
 
-    var path, from;
+    var path, from, mockMutation;
 
     describe('when passed path contains passed "from" operator', function() {
 
@@ -15,27 +15,42 @@ describe('binaryExpressionOperatorReplace lib', function() {
             from = 'a';
         });
 
-        it('should return passed n value + 1', function() {
-            expect(underTest(from, 'b', '0', 0, path)).to.equal(1);
-        });
+        describe('when mutation.shouldMutate returns true', function() {
 
-        describe('when shouldMutate returns true', function() {
-
-            var restore;
-
-            before(function() {
-                restore = underTest.__set__({
-                    shouldMutate: sinon.stub().returns(true)
-                });
+            beforeEach(function() {
+                mockMutation = {
+                    shouldMutate: sinon.stub().returns(true),
+                    increaseNodeCount: sinon.spy()
+                };
+                underTest(mockMutation, from, 'b')('0').BinaryExpression(path);
             });
 
             it('should replace the operator with passed "to" value', function() {
-                underTest(from, 'b', '0', 0, path);
                 expect(path.node.operator).to.equal('b');
             });
 
-            after(function() {
-                restore();
+            it('should call mutation.increaseNodeCount', function() {
+                expect(mockMutation.increaseNodeCount.called).to.equal(true);
+            });
+
+        });
+
+        describe('when mutation.shouldMutate returns false', function() {
+
+            beforeEach(function() {
+                mockMutation = {
+                    shouldMutate: sinon.stub().returns(false),
+                    increaseNodeCount: sinon.spy()
+                };
+                underTest(mockMutation, from, 'b')('0').BinaryExpression(path);
+            });
+
+            it('should not replace the operator', function() {
+                expect(path.node.operator).to.equal(from);
+            });
+
+            it('should call mutation.increaseNodeCount', function() {
+                expect(mockMutation.increaseNodeCount.called).to.equal(true);
             });
 
         });
@@ -47,15 +62,23 @@ describe('binaryExpressionOperatorReplace lib', function() {
         beforeEach(function() {
             path = {node: {operator: 'a'}};
             from = 'c';
+            mockMutation = {
+                shouldMutate: sinon.spy(),
+                increaseNodeCount: sinon.spy()
+            };
+            underTest(mockMutation, from, 'b')('0').BinaryExpression(path);
         });
 
         it('should not change the operator', function() {
-            underTest(from, 'b', '0', 0, path);
             expect(path.node.operator).to.equal('a');
         });
 
-        it('should return same value as passed n', function() {
-            expect(underTest(from, 'b', '0', 0, path)).to.equal(0);
+        it('should not call mutation.shouldMutate', function() {
+            expect(mockMutation.shouldMutate.called).to.equal(false);
+        });
+
+        it('should not call mutation.increaseNodeCount', function() {
+            expect(mockMutation.increaseNodeCount.called).to.equal(false);
         });
 
     });
