@@ -1,6 +1,17 @@
 language: node_js
+
+addons:
+  code_climate:
+    repo_token: 63d80feaf8e54a36ade189584d878e0530cb597642749ee1a4a3ff1215304b50
+
 before_script:
   - npm run build
+
+script: npm run coverage
+
+after_script:
+  - codeclimate-test-reporter < converage/lcov.info
+
 cache:
   directories:
     - node_modules
