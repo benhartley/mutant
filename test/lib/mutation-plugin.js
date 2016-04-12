@@ -64,7 +64,7 @@ describe('mutationPlugin lib', function() {
 
         it('should log node count to stdout', function() {
             underTest.increaseNodeCount();
-            expect(underTest.__get__('console').log.calledWith('Node count: 3')).to.equal(true);
+            expect(underTest.__get__('console').log.calledWith('Node count: 4')).to.equal(true);
         });
 
         afterEach(function() {
