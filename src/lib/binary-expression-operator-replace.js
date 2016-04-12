@@ -1,13 +1,13 @@
-const shouldMutate = require('./should-mutate');
-const increaseNodeCount = require('./increase-node-count');
-
-module.exports = (from, to, stateMask, n, path) => {
-    if (path.node.operator === from) {
-        if (shouldMutate(stateMask, n)) {
-            path.node.operator = to;
+module.exports = (mutation, from, to) => stateMask => {
+    return {
+        BinaryExpression(path) {
+            if (path.node.operator === from) {
+                if (mutation.shouldMutate(stateMask)) {
+                    path.node.operator = to;
+                }
+                mutation.increaseNodeCount();
+            }
         }
-        n = increaseNodeCount(n);
-    }
-    return n;
+    };
 };
 
