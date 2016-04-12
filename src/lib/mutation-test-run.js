@@ -1,42 +1,44 @@
 const async = require('async');
 const get = require('lodash/get');
 
-const MutationTestRun = function(queue, testPath, stateMask) {
-    this.queue = queue;
-    this.testPath = testPath;
-    this.stateMask = stateMask;
-    this.nodeCount = 1;
-    return this;
-};
+module.exports = {
+    nodeCount: 1,
 
-MutationTestRun.prototype.iteration = function(mutation, mapCallback) {
-    return async.whilst(this.hasUnmutatedNodes.bind(this), this.mutateNode(mutation), mapCallback);
-};
+    init(queue, testPath, stateMask) {
+        this.queue = queue;
+        this.testPath = testPath;
+        this.stateMask = stateMask;
+        return this;
+    },
 
-MutationTestRun.prototype.hasUnmutatedNodes = function() {
-    return this.stateMask.length <= this.nodeCount;
-};
+    iteration(mutation, mapCallback) {
+        return async.whilst(this.hasUnmutatedNodes.bind(this), this.mutateNode(mutation), mapCallback);
+    },
 
-MutationTestRun.prototype.mutateNode = function(mutation) {
-    return whilstCallback => this.queue.push(this.getMutationParams(mutation), this.handleNodeMutationResult(whilstCallback));
-};
+    hasUnmutatedNodes() {
+        return this.stateMask.length <= this.nodeCount;
+    },
 
-MutationTestRun.prototype.getMutationParams = function(mutation) {
-    return {
-        testPath: this.testPath,
-        env: {
-            MUTATION: mutation,
-            STATEMASK: this.stateMask
-        }
-    };
-};
+    mutateNode(mutation) {
+        return whilstCallback => this.queue.push(this.getMutationParams(mutation), this.handleNodeMutationResult(whilstCallback));
+    },
 
-MutationTestRun.prototype.handleNodeMutationResult = function(whilstCallback) {
-    return (error, result) => {
-        this.nodeCount = get(result, 'nodeCount');
-        this.stateMask = `${get(result, 'stateMaskWithResult')}1`;
-        return whilstCallback(error, result);
-    };
-};
+    getMutationParams(mutation) {
+        return {
+            testPath: this.testPath,
+            env: {
+                MUTATION: mutation,
+                STATEMASK: this.stateMask
+            }
+        };
+    },
 
-module.exports = MutationTestRun;
+    handleNodeMutationResult(whilstCallback) {
+        return (error, result) => {
+            this.nodeCount = get(result, 'nodeCount');
+            this.stateMask = `${get(result, 'stateMaskWithResult')}1`;
+            return whilstCallback(error, result);
+        };
+    }
+
+};
