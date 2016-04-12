@@ -1,60 +1,64 @@
 var rewire = require('rewire');
+var sinon = require('sinon');
 var expect = require('chai').expect;
-var runMutationPlugin = require('../../helpers/run-mutation-plugin');
 var underTest = rewire('../../../plugins/mutations/boolean-literal-flip');
 
 describe('booleanLiteralFlip mutation plugin', function() {
 
-    var restore;
+    var restore, path;
 
-    beforeEach(function() {
-        restore = underTest.__set__({
-            n: 0
-        });
-    });
+    describe('when mutation.shouldMutate returns true', function() {
 
-    describe('when AST does not contain a BooleanLiteral', function() {
-        it('should return the input unchanged', function() {
-            var input = 'var notBool = "x";';
-            expect(runMutationPlugin(input, underTest, '1')).to.equal(input);
-        });
-    });
-
-    describe('when AST does contain BooleanLiterals', function() {
-
-        var input = 'var firstBool = true;\nvar secondBool = true;';
-
-        describe('when passed stateMask of "00"', function() {
-            it('should return the input unchanged', function() {
-                expect(runMutationPlugin(input, underTest, '00')).to.equal(input);
+        beforeEach(function() {
+            restore = underTest.__set__({
+                mutation: {
+                    shouldMutate: sinon.stub().returns(true),
+                    increaseNodeCount: sinon.spy()
+                }
             });
+            path = {node: {value: true}};
+            underTest('0').BooleanLiteral(path);
         });
 
-        describe('when passed stateMask of "01"', function() {
-            it('should flip the relevant boolean', function() {
-                var expected = 'var firstBool = true;\nvar secondBool = false;';
-                expect(runMutationPlugin(input, underTest, '01')).to.equal(expected);
-            });
+        it('should invert the node boolean value', function() {
+            expect(path.node.value).to.equal(false);
         });
 
-        describe('when passed stateMask of "10"', function() {
-            it('should flip the relevant boolean', function() {
-                var expected = 'var firstBool = false;\nvar secondBool = true;';
-                expect(runMutationPlugin(input, underTest, '10')).to.equal(expected);
-            });
+        it('should call mutation.increaseNodeCount', function() {
+            expect(underTest.__get__('mutation').increaseNodeCount.called).to.equal(true);
         });
 
-        describe('when passed stateMask of "11"', function() {
-            it('should flip the relevant boolean', function() {
-                var expected = 'var firstBool = false;\nvar secondBool = false;';
-                expect(runMutationPlugin(input, underTest, '11')).to.equal(expected);
-            });
+        afterEach(function() {
+            restore();
         });
 
     });
 
-    afterEach(function() {
-        restore();
+    describe('when mutation.shouldMutate returns false', function() {
+
+        beforeEach(function() {
+            restore = underTest.__set__({
+                mutation: {
+                    shouldMutate: sinon.stub().returns(false),
+                    increaseNodeCount: sinon.spy()
+                }
+            });
+            path = {node: {value: true}};
+            underTest('0').BooleanLiteral(path);
+        });
+
+        it('should should not change the node boolean value', function() {
+            expect(path.node.value).to.equal(true);
+        });
+
+        it('should call mutation.increaseNodeCount', function() {
+            expect(underTest.__get__('mutation').increaseNodeCount.called).to.equal(true);
+        });
+
+        afterEach(function() {
+            restore();
+        });
+
     });
 
 });
