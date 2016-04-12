@@ -34,7 +34,7 @@ function runTests(testPath) {
     const mutationTestRun = new MutationTestRun(queue, testPath, '1');
     initialTestRun(queue, testPath);
     async.map(mutations, mutationTestRun.iteration.bind(mutationTestRun), reporter('default'));
-    return introduceTests(mutations);
+    return introduceTests(mutations, testPath);
 }
 
 function main(testPath) {
