@@ -3,6 +3,8 @@
 ![CI status](https://travis-ci.org/benhartley/mutant.svg?branch=master)
 [![Code Climate](https://codeclimate.com/github/benhartley/mutant/badges/gpa.svg)](https://codeclimate.com/github/benhartley/mutant)
 [![Test Coverage](https://codeclimate.com/github/benhartley/mutant/badges/coverage.svg)](https://codeclimate.com/github/benhartley/mutant/coverage)
+[![npm](https://img.shields.io/npm/v/mutant-test.svg?maxAge=2592000)](https://www.npmjs.com/package/mutant-test)
+![Wat](https://img.shields.io/badge/badges-5-blue.svg)
 
 **Note: this is very much at the proof-of-concept stage**
 
