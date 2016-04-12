@@ -10,7 +10,7 @@ before_script:
 script: npm run coverage
 
 after_script:
-  - codeclimate-test-reporter < converage/lcov.info
+  - codeclimate-test-reporter < coverage/lcov.info
 
 cache:
   directories:
