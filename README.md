@@ -1,6 +1,8 @@
 # Mutant
 
 ![CI status](https://travis-ci.org/benhartley/mutant.svg?branch=master)
+[![Code Climate](https://codeclimate.com/github/benhartley/mutant/badges/gpa.svg)](https://codeclimate.com/github/benhartley/mutant)
+[![Code Climate](https://codeclimate.com/github/benhartley/mutant/badges/gpa.svg)](https://codeclimate.com/github/benhartley/mutant)
 
 **Note: this is very much at the proof-of-concept stage**
 
