@@ -1,11 +1,4 @@
 const replace = require('../../lib/binary-expression-operator-replace');
+const mutation = require('../../lib/mutation-plugin');
 
-let n = 0;
-
-module.exports = stateMask => {
-    return {
-        BinaryExpression(path) {
-            n = replace('<', '<=', stateMask, n, path);
-        }
-    };
-};
+module.exports = replace(mutation, '<', '<=');
