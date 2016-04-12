@@ -1,15 +1,12 @@
-const shouldMutate = require('../../lib/should-mutate');
-const increaseNodeCount = require('../../lib/increase-node-count');
-
-let n = 0;
+const mutation = require('../../lib/mutation-plugin');
 
 module.exports = stateMask => {
     return {
         BooleanLiteral(path) {
-            if (shouldMutate(stateMask, n)) {
+            if (mutation.shouldMutate(stateMask)) {
                 path.node.value = !path.node.value;
             }
-            n = increaseNodeCount(n);
+            mutation.increaseNodeCount();
         }
     };
 };
