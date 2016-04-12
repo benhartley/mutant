@@ -8,7 +8,7 @@ const initialTestRun = require('./initial-test-run');
 const packageJson = require('../package');
 const reporter = require('./reporter');
 const testProcessCreator = require('./test-process-creator');
-const MutationTestRun = require('./mutation-test-run');
+const mutationTestRun = require('./mutation-test-run');
 
 require('source-map-support').install();
 
@@ -31,9 +31,9 @@ function introduceTests(mutations, testPath) {
 function runTests(testPath) {
     const queue = async.queue(testProcessCreator, 1);
     const mutations = config.get('mutations');
-    const mutationTestRun = new MutationTestRun(queue, testPath, '1');
+    const testRunner = Object.create(mutationTestRun).init(queue, testPath, '1');
     initialTestRun(queue, testPath);
-    async.map(mutations, mutationTestRun.iteration.bind(mutationTestRun), reporter('default'));
+    async.map(mutations, testRunner.iteration.bind(testRunner), reporter('default'));
     return introduceTests(mutations, testPath);
 }
 
