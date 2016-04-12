@@ -11,27 +11,26 @@ function updateStateMask(params, result) {
     };
 }
 
-function Parser() {
-    return assign(this, {nodeCount: 0});
-}
+module.exports = {
+    nodeCount: 0,
 
-Parser.prototype.getTestParser = function(params, callback) {
-    const testParser = tapParser(result => {
-        return callback(null, assign(
-            {mutation: get(params, 'env.MUTATION')},
-            {tap: result},
-            updateStateMask(params, result),
-            {nodeCount: this.nodeCount}
-        ));
-    });
-    testParser.on('extra', this.parseNodeCount.bind(this));
-    return testParser;
+    getTestParser(params, callback) {
+        const testParser = tapParser(result => {
+            return callback(null, assign(
+                {mutation: get(params, 'env.MUTATION')},
+                {tap: result},
+                updateStateMask(params, result),
+                {nodeCount: this.nodeCount}
+            ));
+        });
+        testParser.on('extra', this.parseNodeCount.bind(this));
+        return testParser;
+    },
+
+    parseNodeCount(extra) {
+        const matchedNodeCount = extra.match(/Node count: (\d+)/);
+        if (matchedNodeCount === null) {return;}
+        this.nodeCount = +matchedNodeCount[1];
+    }
+
 };
-
-Parser.prototype.parseNodeCount = function(extra) {
-    const matchedNodeCount = extra.match(/Node count: (\d+)/);
-    if (matchedNodeCount === null) {return;}
-    this.nodeCount = +matchedNodeCount[1];
-};
-
-module.exports = Parser;

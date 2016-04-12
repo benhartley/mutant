@@ -1,7 +1,7 @@
 const assign = require('lodash/assign');
 const spawn = require('child_process').spawn;
 const config = require('./config');
-const Parser = require('./test-process-output-parser');
+const outputParser = require('./test-process-output-parser');
 
 function getTestCommand(testPath) {
     return config
@@ -13,7 +13,7 @@ function getTestCommand(testPath) {
 module.exports = (params, callback) => {
     const [command, ...args] = getTestCommand(params.testPath);
     const testProcess = spawn(command, args, assign(process.env, params.env));
-    const parser = new Parser();
+    const parser = Object.create(outputParser);
     const testParser = parser.getTestParser(params, callback);
     testProcess.stdout.pipe(testParser);
     testProcess.on('exit', code => {
