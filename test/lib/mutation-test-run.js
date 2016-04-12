@@ -10,7 +10,7 @@ describe('MutationTestRun lib', function() {
     describe('constructor', function() {
         it('should set the initial state', function() {
             var queue = {a: true};
-            instance = new underTest(queue, 'path', '1');
+            instance = Object.create(underTest).init(queue, 'path', '1');
             expect(instance.queue).to.deep.equal(queue);
             expect(instance.testPath).to.equal('path');
             expect(instance.stateMask).to.equal('1');
@@ -21,7 +21,7 @@ describe('MutationTestRun lib', function() {
     describe('hasUnmutatedNodes predicate', function() {
 
         beforeEach(function() {
-            instance = new underTest({}, 'path', '1');
+            instance = Object.create(underTest).init({}, 'path', '1');
         });
 
         describe('when stateMask length is greater than nodeCount', function() {
@@ -59,7 +59,7 @@ describe('MutationTestRun lib', function() {
                     STATEMASK: '1'
                 }
             };
-            instance = new underTest({}, 'path', '1');
+            instance = Object.create(underTest).init({}, 'path', '1');
             expect(instance.getMutationParams('m')).to.deep.equal(expected);
         });
     });
@@ -71,7 +71,7 @@ describe('MutationTestRun lib', function() {
         beforeEach(function() {
             callback = sinon.spy();
             result = {nodeCount: 3, stateMaskWithResult: '01'};
-            instance = new underTest({}, 'path', '1');
+            instance = Object.create(underTest).init({}, 'path', '1');
         });
 
         it('should update the nodeCount property of the instance', function() {
