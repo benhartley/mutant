@@ -1,8 +1,7 @@
 require('../../lib/register');
-var rewire = require('rewire');
 var sinon = require('sinon');
 var expect = require('chai').expect;
-var underTest = rewire('../../lib/binary-expression-operator-replace');
+var underTest = require('../../lib/binary-expression-operator-replace');
 
 describe('binaryExpressionOperatorReplace lib', function() {
 
