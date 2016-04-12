@@ -66,7 +66,7 @@ describe('testProcessOutputParser lib', function() {
 
     describe('exported Parser object', function() {
 
-        var parser = new underTest();
+        var parser = Object.create(underTest);
 
         describe('parseNodeCount method', function() {
 
