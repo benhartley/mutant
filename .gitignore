@@ -3,3 +3,4 @@ npm-debug.log*
 /plugins
 /lib
 /coverage
+/register.js
