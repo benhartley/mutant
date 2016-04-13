@@ -74,5 +74,5 @@ Currently `mutant` only supports running against a single test file at a time, s
 Then when `mutant` comes to run your tests it can simply replace the `$FILE` placeholder with the path to your test file.
 
 # Mutation plugins
-Mutations are provided to `mutant` via [plugins](src/plugins/mutations) and can be selectively enabled / disabled via the [config file](#config)
+Mutations are provided to `mutant` via [plugins](src/plugins/mutations) and can be selectively enabled / disabled via the [config file](#config). Babel is used to parse and traverse your code, as well as to generate the mutants based on the mutation plugins you select.
 
