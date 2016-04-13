@@ -12,7 +12,7 @@
 
 `mutant` is a [mutation testing framework](https://en.wikipedia.org/wiki/Mutation_testing) designed to help evaluate the quality of test suites for JavaScript applications.
 
-### How does it work?
+### What's the point?
 
 Code coverage tools are useful to give an idea of how much of your code runs when your tests run, giving an overview of areas that may have been overlooked.
 
