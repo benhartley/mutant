@@ -53,7 +53,22 @@ Some examples for popular frameworks:
 ``` sh
 mocha --reporter tap
 ava --tap
+tap
+tape
 ```
 
 Currently `mutant` only supports running against a single test file at a time, so your test framework will also need to support passing the path to run a subset of tests. Watch this space for the ability to run full test suites.
+
+# Config
+
+`mutant` expects a config file to exist at [`.mutant/config.js`](.mutant/config.js) (might make this a little more flexible in the future). This is where you tell `mutant` how to run your tests via the `tests.run` property. Note, currently `mutant` only supports running against a single test file at a time, and the `tests.run` config property must contain a `$FILE` placeholder where the filename will be passed into your test runner, e.g. for Mocha, your `tests.run` config value might look like this:
+
+``` sh
+mocha --reporter tap $FILE
+```
+
+Then when `mutant` comes to run your tests it can simply replace the `$FILE` placeholder with the path to your test file.
+
+# Mutation plugins
+Mutations are provided to `mutant` via [plugins](src/plugins/mutations) and can be selectively enabled / disabled via the [config file](#config)
 
