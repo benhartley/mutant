@@ -8,5 +8,7 @@ module.exports = {
         'lte-to-lt',
         'gt-to-gte',
         'gte-to-gt',
+        'plus-to-minus',
+        'minus-to-plus'
     ]
 };
