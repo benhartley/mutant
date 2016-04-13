@@ -46,7 +46,7 @@ Or access the local binary directly using
 
 # Usage
 
-You can use `mutant` alongside any test framework that can output results in [TAP](link to tap here) format.
+You can use `mutant` alongside any test framework that can output results in [TAP](https://testanything.org/) format.
 
 Some examples for popular frameworks:
 
