@@ -5,6 +5,8 @@ var underTest = rewire('../../lib/test-process-output-parser');
 
 describe('testProcessOutputParser lib', function() {
 
+    var restore;
+
     describe('updateStateMask method', function() {
 
         var updateStateMask = underTest.__get__('updateStateMask');
@@ -19,8 +21,6 @@ describe('testProcessOutputParser lib', function() {
         });
 
         describe('when passed a params object with truthy .env.STATEMASK property', function() {
-
-            var restore;
 
             describe('when passed a test pass result', function() {
 
@@ -66,13 +66,43 @@ describe('testProcessOutputParser lib', function() {
 
     describe('exported Parser object', function() {
 
-        var parser = Object.create(underTest);
+        var parser, params, callback, onSpy;
 
-        describe('parseNodeCount method', function() {
+        beforeEach(function() {
+            parser = Object.create(underTest);
+        });
+
+        describe('getTestParser method', function() {
 
             beforeEach(function() {
-                parser.nodeCount = 0;
+                onSpy = sinon.spy();
+                restore = underTest.__set__({
+                    tapParser: sinon.stub().returns({
+                        on: onSpy
+                    })
+                });
+                parser.processResult = sinon.spy();
+                params = {a: true};
+                callback = function() {};
+
+                parser.getTestParser(params, callback);
             });
+
+            it('should call this.processResult with params and callback', function() {
+                expect(parser.processResult.calledWith(params, callback)).to.equal(true);
+            });
+
+            it('should bind to the "extra" event on the tapParser stream', function() {
+                expect(onSpy.calledWith('extra')).to.equal(true);
+            });
+
+            afterEach(function() {
+                restore();
+            });
+
+        });
+
+        describe('parseNodeCount method', function() {
 
             describe('when passed extra TAP output that matches node count pattern', function() {
                 it('should set the nodeCount property of the parser instance to the matched value', function() {
@@ -92,6 +122,41 @@ describe('testProcessOutputParser lib', function() {
                     expect(parser.nodeCount).to.equal(0);
                 });
 
+            });
+
+        });
+
+        describe('processResult method', function() {
+
+            beforeEach(function() {
+                restore = underTest.__set__({
+                    updateStateMask: sinon.stub().returns({stateMask: true})
+                });
+                parser.nodeCount = 3;
+            });
+
+            it('should call passed callback with correct params', function() {
+                var params = {
+                    env: {
+                        MUTATION: 'some-mutation'
+                    }
+                };
+                var callbackSpy = sinon.spy();
+                var expectedParams = {
+                    mutation: 'some-mutation',
+                    tap: {
+                        result: true
+                    },
+                    stateMask: true,
+                    nodeCount: 3
+
+                };
+                parser.processResult(params, callbackSpy)({result: true});
+                expect(callbackSpy.calledWith(null, expectedParams)).to.equal(true);
+            });
+
+            afterEach(function() {
+                restore();
             });
 
         });
