@@ -48,3 +48,21 @@ if (x <= y) {}
 if (x < y) {}
 ```
 
+### `minus-to-plus`
+Replaces an instance of the `BinaryExpression` operator `-` with `+`
+
+``` javascript
+const x = 2 - 1;
+// becomes:
+const x = 2 + 1;
+```
+
+### `plus-to-minus`
+Replaces an instance of the `BinaryExpression` operator `+` with `-`
+
+``` javascript
+const x = 2 + 1;
+// becomes:
+const x = 2 - 1;
+```
+
