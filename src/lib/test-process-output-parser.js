@@ -15,14 +15,7 @@ module.exports = {
     nodeCount: 0,
 
     getTestParser(params, callback) {
-        const testParser = tapParser(result => {
-            return callback(null, assign(
-                {mutation: get(params, 'env.MUTATION')},
-                {tap: result},
-                updateStateMask(params, result),
-                {nodeCount: this.nodeCount}
-            ));
-        });
+        const testParser = tapParser(this.processResult(params, callback));
         testParser.on('extra', this.parseNodeCount.bind(this));
         return testParser;
     },
@@ -31,6 +24,17 @@ module.exports = {
         const matchedNodeCount = extra.match(/Node count: (\d+)/);
         if (matchedNodeCount === null) {return;}
         this.nodeCount = +matchedNodeCount[1];
+    },
+
+    processResult(params, callback) {
+        return result => {
+            return callback(null, assign(
+                {mutation: get(params, 'env.MUTATION')},
+                {tap: result},
+                updateStateMask(params, result),
+                {nodeCount: this.nodeCount}
+            ));
+        };
     }
 
 };
