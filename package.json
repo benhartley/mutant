@@ -1,6 +1,6 @@
 {
   "name": "mutant-test",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A mutation testing framework for JavaScript",
   "main": "index.js",
   "scripts": {
