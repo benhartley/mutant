@@ -17,7 +17,7 @@ It works alongside any test framework that can output results in [TAP](https://t
 
 [`babel`](http://babeljs.io/) is used to parse and traverse your code, as well as to generate the mutants based on the [mutation plugins](src/plugins/mutations) you select.
 
-It currently only supports running against a single test file at a time. 
+It currently only supports running against a single test file at a time, and there are only a handful of mutations. Watch this space for more in the near future, or feel free to add your own plugins.
 
 ### Purpose
 
