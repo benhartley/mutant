@@ -15,7 +15,7 @@ JavaScript Mutation Testing Framework
 
 It works alongside any test framework that can output results in [TAP](https://testanything.org/) format, 
 
-[`babel`](link to babel) is used to parse and traverse your code, as well as to generate the mutants based on the [mutation plugins](src/plugins/mutations) you select.
+[`babel`](http://babeljs.io/) is used to parse and traverse your code, as well as to generate the mutants based on the [mutation plugins](src/plugins/mutations) you select.
 
 It currently only supports running against a single test file at a time. 
 
